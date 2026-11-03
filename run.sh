@@ -43,8 +43,9 @@ for c in $CLIENTS; do
   for cl in "${ORDER[@]}"; do
     [ -d $WORK/classes-$c-$cl ] || continue
     src=; [ -f clients/$c/source.txt ] && src=$(cat clients/$c/source.txt)
+    deps=; [ -f clients/$c/deps.txt ] && deps=:$(coursier fetch --classpath -E org.scala-lang:scala-library -E org.scala-lang:scala-reflect -E org.scala-lang:scala-compiler $(cat clients/$c/deps.txt))
     for rl in "${ORDER[@]}"; do
-      out=$(java ${src:+"-Ddemo.source=$src"} -cp "$WORK/classes-$c-$cl:$(cp_of $rl)" Main 2>&1)
+      out=$(java ${src:+"-Ddemo.source=$src"} -cp "$WORK/classes-$c-$cl:$(cp_of $rl)$deps" Main 2>&1)
       echo "$out" > $RES/bin-$c-$cl-$rl.msg
       case "$out" in ok*) echo ok;; *) echo fail;; esac > $RES/bin-$c-$cl-$rl.status
     done

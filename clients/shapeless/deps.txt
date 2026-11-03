@@ -1,0 +1,1 @@
+com.chuusai:shapeless_2.13:2.3.13

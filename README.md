@@ -28,3 +28,4 @@ Clients
 | `interactive` | `new { ... } with InteractiveAnalyzer` (Ammonite's Pressy) |
 | `macro-global` | a macro downcasting `c.universe` to `Global` and calling `global.analyzer` (not public API, but `_2.13` libraries do it, so binary compatibility matters) |
 | `macro-symboltable` | a macro downcasting to `scala.reflect.internal.SymbolTable` |
+| `shapeless` | published `shapeless_2.13:2.3.13` ([`generic.scala`](https://github.com/milessabin/shapeless/blob/5f5a3d4398174f0365bbc9e40a659c64066d15e7/core/shared/src/main/scala/shapeless/generic.scala#L395)) deriving `Generic`/`LabelledGeneric`: the in-the-wild `asInstanceOf[Global]` macro, plus `global.analyzer.Typer`/`Context` casts |

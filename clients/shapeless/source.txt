@@ -1,0 +1,9 @@
+import shapeless._
+sealed trait Shape
+case class Circle(r: Double) extends Shape
+case class Rect(w: Double, h: Double) extends Shape
+object T {
+  val g = Generic[Shape]
+  val l = LabelledGeneric[Circle]
+  val k = the[Generic[Rect]]
+}
