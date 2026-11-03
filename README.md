@@ -2,7 +2,7 @@
 
 Source and binary compatibility of the ways code interacts with `scala.tools.nsc.typechecker.Analyzer`, as changed by [scala/scala#11306](https://github.com/scala/scala/pull/11306), compared with the alternative from [this comment](https://github.com/scala/scala/pull/11306#issuecomment-6233978016) (make `Analyzer` itself an abstract class).
 
-No build tool: each directory under `clients/` is a handful of sources plus `common/Harness.scala`, which runs one in-memory compilation with the client's `Global`. `run.sh` compiles every client with every compiler, then runs each client's classes against every compiler's jars, and writes [TRANSCRIPT.md](TRANSCRIPT.md).
+No build tool: each directory under `clients/` is a handful of sources plus `common/Harness.scala`, which runs one in-memory compilation with the client's `Global`. `run.sh` compiles every client with every compiler, then runs each client's classes against every compiler's jars, and builds the single-page transcript `docs/index.html` (an index of cases, with code, source matrix and binary matrix for the selected one): <https://retronym.github.io/scala-analyzer-compat-demo/>.
 
 ```bash
 ./run.sh

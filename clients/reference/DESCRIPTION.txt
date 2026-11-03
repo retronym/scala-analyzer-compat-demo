@@ -1,0 +1,1 @@
+Only uses `global.analyzer` (registers an `AnalyzerPlugin`), like the sbt compiler bridge and ordinary plugins.

@@ -1,0 +1,1 @@
+Does not instantiate the analyzer at all: keeps the Global's own and steers macros through `findMacroClassLoader` (retronym/Ammonite#1).

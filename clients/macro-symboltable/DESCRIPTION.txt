@@ -1,0 +1,1 @@
+A naughty macro: downcasts `c.universe` to `scala.reflect.internal.SymbolTable`; no analyzer involved, as a control.

@@ -1,0 +1,1 @@
+One shared source; only a one-file `AnalyzerBase` differs per compiler (`old/` extends `Analyzer`, `new/` extends `AbstractAnalyzer`).

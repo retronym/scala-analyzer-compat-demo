@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analyzer compat demo</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1f2328; --muted: #656d76; --line: #d0d7de; --panel: #f6f8fa;
+    --ok: #1a7f37; --okbg: #dafbe1; --bad: #cf222e; --badbg: #ffebe9; --accent: #0969da;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d1117; --fg: #e6edf3; --muted: #8d96a0; --line: #30363d; --panel: #161b22;
+      --ok: #3fb950; --okbg: #12261e; --bad: #f85149; --badbg: #2d1315; --accent: #58a6ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  code, pre { font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .layout { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+  nav { border-right: 1px solid var(--line); background: var(--panel); padding: 16px 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+  nav h1 { font-size: 15px; margin: 0 16px 12px; }
+  nav a { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 6px 16px; color: var(--fg); text-decoration: none; border-left: 3px solid transparent; }
+  nav a:hover { background: var(--line); }
+  nav a.active { border-left-color: var(--accent); background: var(--bg); font-weight: 600; }
+  .dots { white-space: nowrap; font-size: 11px; letter-spacing: 1px; }
+  main { padding: 24px 32px 64px; max-width: 1100px; }
+  h2 { margin: 0 0 4px; font-size: 22px; }
+  h3 { margin: 28px 0 8px; font-size: 16px; }
+  .desc { color: var(--muted); margin: 0 0 16px; }
+  table { border-collapse: collapse; width: 100%; margin: 8px 0; }
+  th, td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--panel); font-weight: 600; }
+  td.ok { background: var(--okbg); } td.bad { background: var(--badbg); }
+  td.cell { cursor: pointer; } td.cell:hover { outline: 2px solid var(--accent); outline-offset: -2px; }
+  td.cell .short { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; word-break: break-word; }
+  .sub { color: var(--muted); font-weight: 400; font-size: 12px; display: block; }
+  pre { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; overflow-x: auto; margin: 4px 0 16px; white-space: pre; }
+  .path { font: 12px ui-monospace, Menlo, monospace; color: var(--muted); }
+  #detail { margin-top: 8px; }
+  #detail pre { border-color: var(--accent); }
+  .legend { color: var(--muted); font-size: 13px; }
+  @media (max-width: 800px) {
+    .layout { grid-template-columns: 1fr; }
+    nav { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+    main { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav id="nav"></nav>
+  <main id="main"></main>
+</div>
+<script>
+const DATA = /*DATA*/;
+const ORDER = ["18", "pr", "alt"];
+const ball = ok => ok ? "🟢" : "🔴";
+
+function el(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (k === "class") e.className = v; else if (k.startsWith("on")) e.addEventListener(k.slice(2), v); else e.setAttribute(k, v);
+  }
+  for (const k of kids.flat()) if (k != null) e.append(k.nodeType ? k : document.createTextNode(k));
+  return e;
+}
+const verHeader = l => el("th", {}, l, el("span", { class: "sub" }, DATA.versions[l] + " · " + DATA.labels[l]));
+
+function binaryOk(c) {
+  let ok = 0, all = 0;
+  for (const cl in c.binary) for (const rl in c.binary[cl]) { all++; if (c.binary[cl][rl].ok) ok++; }
+  return [ok, all];
+}
+
+function buildNav(active) {
+  const nav = document.getElementById("nav");
+  nav.replaceChildren(el("h1", {}, "Analyzer compat demo"));
+  const item = (hash, label, dots) => el("a", { href: "#" + hash, class: active === hash ? "active" : "" }, el("span", {}, label), el("span", { class: "dots" }, dots));
+  nav.append(item("summary", "Summary", ""));
+  for (const c of DATA.cases) nav.append(item(c.name, c.name, ORDER.map(l => ball(c.source[l].ok)).join("")));
+  nav.append(el("p", { class: "legend", style: "margin: 16px;" }, "Dots: source compiles on ", ORDER.map(l => DATA.versions[l]).join(", "), "."));
+}
+
+function showDetail(box, title, msg) {
+  box.replaceChildren(el("h3", {}, title), el("pre", {}, msg || "(no output)"));
+  box.scrollIntoView({ block: "nearest" });
+}
+
+function sourceMatrix(cases, link) {
+  return el("table", {}, el("tr", {}, el("th", {}, "client"), ORDER.map(verHeader)),
+    cases.map(c => el("tr", {}, el("td", {}, link ? el("a", { href: "#" + c.name }, c.name) : c.name),
+      ORDER.map(l => el("td", { class: c.source[l].ok ? "ok" : "bad" }, ball(c.source[l].ok) + " " + (c.source[l].ok ? "compiles" : "compile error"))))));
+}
+
+function renderSummary(main) {
+  main.append(el("h2", {}, "Analyzer compat demo"),
+    el("p", { class: "desc" }, "Source and binary compatibility of the ways code interacts with ", el("code", {}, "scala.tools.nsc.typechecker.Analyzer"),
+      ", as changed by ", el("a", { href: "https://github.com/scala/scala/pull/11306" }, "scala/scala#11306"),
+      ", against the alternative of making ", el("code", {}, "Analyzer"), " itself an abstract class (", el("a", { href: "https://github.com/scala/scala/pull/11306#issuecomment-6233978016" }, "comment"), ")."));
+  main.append(el("h3", {}, "Source: does the client compile?"), sourceMatrix(DATA.cases, true));
+  main.append(el("h3", {}, "Binary: classes compiled on one compiler, run on another"),
+    el("p", { class: "desc" }, "Each cell: how many of the (compiled on, run on) pairs worked."));
+  main.append(el("table", {}, el("tr", {}, el("th", {}, "client"), el("th", {}, "working pairs")),
+    DATA.cases.map(c => { const [ok, all] = binaryOk(c); return el("tr", {}, el("td", {}, el("a", { href: "#" + c.name }, c.name)), el("td", { class: ok === all ? "ok" : "bad" }, ball(ok === all) + " " + ok + " / " + all)); })));
+  main.append(el("h3", {}, "Compilers"),
+    el("table", {}, el("tr", {}, el("th", {}, "label"), el("th", {}, "version"), el("th", {}, "what")),
+      ORDER.map(l => el("tr", {}, el("td", {}, l), el("td", {}, DATA.versions[l]), el("td", {}, DATA.labels[l])))));
+}
+
+function renderCase(main, c) {
+  main.append(el("h2", {}, c.name), el("p", { class: "desc" }, c.description));
+  for (const f of c.files) main.append(el("div", { class: "path" }, f.path), el("pre", {}, f.text));
+  const box = el("div", { id: "detail" });
+  main.append(el("h3", {}, "Source: compile with each compiler"), sourceMatrix([c], false));
+  const errs = ORDER.filter(l => !c.source[l].ok);
+  if (errs.length) {
+    main.append(el("p", { class: "legend" }, "Click a red cell below for the compiler's error."));
+    main.append(el("table", {}, el("tr", {}, ORDER.map(verHeader)), el("tr", {}, ORDER.map(l => c.source[l].ok ? el("td", {}, "") :
+      el("td", { class: "cell bad", onclick: () => showDetail(box, "compile error on " + DATA.versions[l], c.source[l].msg) }, "🔴 show error")))));
+  }
+  main.append(el("h3", {}, "Binary: compiled on row, run on column"), el("p", { class: "legend" }, "Click a cell for the full output."));
+  main.append(el("table", {}, el("tr", {}, el("th", {}, "compiled on ↓ / run on →"), ORDER.map(verHeader)),
+    ORDER.filter(cl => c.binary[cl]).map(cl => el("tr", {}, verHeader(cl),
+      ORDER.map(rl => { const r = c.binary[cl][rl];
+        return el("td", { class: "cell " + (r.ok ? "ok" : "bad"), onclick: () => showDetail(box, "compiled on " + DATA.versions[cl] + ", run on " + DATA.versions[rl], r.msg) },
+          ball(r.ok) + " " + (r.ok ? "works" : "fails"), el("span", { class: "short" }, r.short)); })))));
+  main.append(box);
+}
+
+function render() {
+  const hash = decodeURIComponent(location.hash.slice(1)) || "summary";
+  const c = DATA.cases.find(c => c.name === hash);
+  buildNav(c ? c.name : "summary");
+  const main = document.getElementById("main");
+  main.replaceChildren();
+  c ? renderCase(main, c) : renderSummary(main);
+  window.scrollTo(0, 0);
+}
+addEventListener("hashchange", render);
+render();
+</script>
+</body>
+</html>

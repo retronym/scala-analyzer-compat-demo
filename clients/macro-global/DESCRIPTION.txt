@@ -1,0 +1,1 @@
+A naughty macro (not public API): downcasts `c.universe` to `Global` and calls `global.analyzer`. Typically published as `_2.13`, so binary compatibility is what matters.

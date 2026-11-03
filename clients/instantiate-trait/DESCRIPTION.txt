@@ -1,0 +1,1 @@
+Instantiates the analyzer the way Ammonite 3.0.9 does: `new { val global = g } with Analyzer [with MacroAnnotationNamers]`.
