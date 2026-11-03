@@ -1,0 +1,10 @@
+import ai.x.play.json.Jsonx
+import play.api.libs.json._
+case class A(a: Int, b: String)
+sealed trait S
+case class S1(x: Int) extends S
+case class S2(y: String) extends S
+object T {
+  val f = Jsonx.formatCaseClass[A]
+  val s = Jsonx.formatSealed[S]
+}

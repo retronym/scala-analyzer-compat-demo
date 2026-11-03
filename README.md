@@ -33,3 +33,5 @@ Clients
 | `macro-monix` | replica of monix's `InlineMacros.stripUnApplyNodes`: `global.nme` from the downcast `Global` |
 | `macro-cvogt` | replica of cvogt/scala-extensions' `EnumerateSingletons`: `global.TypeTreeWithDeferredRefCheck` |
 | `macro-upickle-pprint` | replica of jrudolph/upickle-pprint's `Derive`: `global.analyzer.Typer.context.isAccessible` and `SymbolTable.treeBuild` |
+| `macro-phantom` | replica of phantom's `HListHelpers.prefix`: `Type.prefix` through the downcast `Global` |
+| `play-json-extensions` | published `play-json-extensions_2.13:0.42.0`; broken on 2.13.18 already (`TypeTreeWithDeferredRefCheck` constructor changed), so a baseline control, not PR fallout |

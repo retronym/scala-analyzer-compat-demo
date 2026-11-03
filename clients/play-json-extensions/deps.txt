@@ -1,0 +1,1 @@
+ai.x:play-json-extensions_2.13:0.42.0

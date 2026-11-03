@@ -1,0 +1,1 @@
+Replica of [phantom `HListHelpers.prefix`](https://github.com/msmygit/phantom/blob/0a9d6097dc7c807f8fd9135ba71f7483699a2119/phantom-dsl/src/main/scala/com/outworkers/phantom/macros/toolbelt/HListHelpers.scala#L62): `tpe.asInstanceOf[global.Type].prefix` through the downcast `Global`. No analyzer involved.

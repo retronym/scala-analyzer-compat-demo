@@ -1,0 +1,1 @@
+Published `play-json-extensions_2.13:0.42.0` ([source](https://github.com/RotterdamLogisticsLab/play-json-extensions)) deriving a case class format and a sealed-trait format. `formatSealed` builds a `global.TypeTreeWithDeferredRefCheck` (same trick as cvogt/scala-extensions) from the downcast `Global`.
