@@ -1,0 +1,1 @@
+Replica of [jrudolph/upickle-pprint `Derive`](https://github.com/jrudolph/upickle-pprint/blob/HEAD/derive/shared/src/main/scala/derive/Derive.scala): `callsiteTyper.asInstanceOf[global.analyzer.Typer].context.isAccessible`, then `SymbolTable` / `treeBuild.mkAttributedRef`.

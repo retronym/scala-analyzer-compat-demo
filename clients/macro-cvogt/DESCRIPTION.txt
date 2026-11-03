@@ -1,0 +1,2 @@
+Replica of [cvogt/scala-extensions `EnumerateSingletons`](https://github.com/cvogt/scala-extensions/blob/HEAD/src/main/scala/EnumerateSingletons.scala): builds a `global.TypeTreeWithDeferredRefCheck` from the downcast `Global`.
+ (Adapted: the original uses the pre-2.13 no-argument constructor.)

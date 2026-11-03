@@ -1,0 +1,1 @@
+Replica of [monix `InlineMacros.stripUnApplyNodes`](https://github.com/monix/monix/blob/HEAD/monix-execution/atomic/shared/src/main/scala-2/monix/execution/internal/InlineMacros.scala): a `Transformer` using `global.nme` from the downcast `Global`. No analyzer involved.

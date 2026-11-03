@@ -1,0 +1,1 @@
+Replica of [scalameta `ConversionMacros.typeMismatchMessage`](https://github.com/scalameta/scalameta/blob/64bfbe8a89422c712e90e6c7542c30077d7e82bb/scalameta/quasiquotes/shared/src/main/scala-2/scala/meta/internal/quasiquotes/ConversionMacros.scala#L36): downcasts to `Global` and calls `g.analyzer.foundReqMsg(...)` directly, a method call through the `Analyzer` type itself.
