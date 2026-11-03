@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Analyzer compat demo</title>
+<link rel="stylesheet" media="(prefers-color-scheme: light)" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+<link rel="stylesheet" media="(prefers-color-scheme: dark)" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 <style>
   :root {
     --bg: #ffffff; --fg: #1f2328; --muted: #656d76; --line: #d0d7de; --panel: #f6f8fa;
@@ -38,6 +40,7 @@
   .sub { color: var(--muted); font-weight: 400; font-size: 12px; display: block; }
   pre { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; overflow-x: auto; margin: 4px 0 16px; white-space: pre; }
   .path { font: 12px ui-monospace, Menlo, monospace; color: var(--muted); }
+  pre code.hljs { background: transparent; padding: 0; }
   #detail { margin-top: 8px; }
   #detail pre { border-color: var(--accent); }
   .legend { color: var(--muted); font-size: 13px; }
@@ -53,6 +56,8 @@
   <nav id="nav"></nav>
   <main id="main"></main>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/scala.min.js"></script>
 <script>
 const DATA = /*DATA*/;
 const ORDER = ["18", "pr", "alt"];
@@ -111,7 +116,11 @@ function renderSummary(main) {
 
 function renderCase(main, c) {
   main.append(el("h2", {}, c.name), el("p", { class: "desc" }, c.description));
-  for (const f of c.files) main.append(el("div", { class: "path" }, f.path), el("pre", {}, f.text));
+  for (const f of c.files) {
+    const code = el("code", { class: "language-scala" }, f.text);
+    main.append(el("div", { class: "path" }, f.path), el("pre", {}, code));
+    if (window.hljs) hljs.highlightElement(code);
+  }
   const box = el("div", { id: "detail" });
   main.append(el("h3", {}, "Source: compile with each compiler"), sourceMatrix([c], false));
   const errs = ORDER.filter(l => !c.source[l].ok);
