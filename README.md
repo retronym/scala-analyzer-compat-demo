@@ -15,6 +15,7 @@ Compilers (publish them locally first; see the commands in `run.sh`'s header):
 | `18` | released 2.13.18 | `2.13.18` |
 | `pr` | PR head: `trait Analyzer` self-typed `AbstractAnalyzer`, `Erasure` split out | `2.13.99` |
 | `alt` | PR tree with `AbstractAnalyzer` folded into `abstract class Analyzer` (the `Erasure` split is needed too) | `2.13.98` |
+| `third` | `trait Analyzer extends AbstractAnalyzer with <parts>` ([retronym/scala#198](https://github.com/retronym/scala/pull/198)) | `2.13.97` |
 
 Clients
 

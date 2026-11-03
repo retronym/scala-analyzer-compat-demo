@@ -3,7 +3,7 @@
 import json, os, sys, html, re
 
 res, out = sys.argv[1], sys.argv[2]
-ORDER = ["18", "pr", "alt"]
+ORDER = ["18", "pr", "alt", "third"]
 read = lambda p: open(p).read().strip() if os.path.exists(p) else None
 
 def short(msg):
@@ -35,7 +35,7 @@ for c in sorted(os.listdir("clients")):
     cases.append(case)
 
 data = {"versions": {l: read(f"{res}/ver-{l}") for l in ORDER},
-        "labels": {"18": "released", "pr": "scala/scala#11306", "alt": "abstract class Analyzer"},
+        "labels": {"18": "released", "pr": "scala/scala#11306", "alt": "abstract class Analyzer", "third": "trait Analyzer extends AbstractAnalyzer"},
         "cases": cases}
 tmpl = open("template.html").read()
 os.makedirs(os.path.dirname(out), exist_ok=True)

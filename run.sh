@@ -5,10 +5,11 @@
 #   18  released 2.13.18
 #   pr  scala/scala#11306 (trait Analyzer self-typed AbstractAnalyzer), published locally as 2.13.99
 #   alt the comment-variant (abstract class Analyzer), published locally as 2.13.98
+#   third trait Analyzer extends AbstractAnalyzer (retronym/scala), published locally as 2.13.97
 set -u
 cd "$(dirname "$0")"
-declare -A VER=( [18]=2.13.18 [pr]=2.13.99 [alt]=2.13.98 )
-ORDER=(18 pr alt)
+declare -A VER=( [18]=2.13.18 [pr]=2.13.99 [alt]=2.13.98 [third]=2.13.97 )
+ORDER=(18 pr alt third)
 OUT=TRANSCRIPT.md
 WORK=${TMPDIR:-/tmp}/analyzer-compat-demo; rm -rf "$WORK"; mkdir -p "$WORK"
 
