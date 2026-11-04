@@ -36,3 +36,7 @@ Clients
 | `macro-upickle-pprint` | replica of jrudolph/upickle-pprint's `Derive`: `global.analyzer.Typer.context.isAccessible` and `SymbolTable.treeBuild` |
 | `macro-phantom` | replica of phantom's `HListHelpers.prefix`: `Type.prefix` through the downcast `Global` |
 | `play-json-extensions` | published `play-json-extensions_2.13:0.42.0`; broken on 2.13.18 already (`TypeTreeWithDeferredRefCheck` constructor changed), so a baseline control, not PR fallout |
+
+## Synthetic benchmark
+
+`./bench.sh [forks] [warmup] [measured]` compiles a generated corpus in a warm JVM, each iteration with one of K `Global`s whose analyzers are distinct classes, for the merge-base build (2.13.96) and the three variants. Results: [BENCH.md](BENCH.md).
